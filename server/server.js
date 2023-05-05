@@ -19,10 +19,10 @@ const authRoutes = require("./routes/auth");
 // app middleware
 app.use(morgan("dev"));
 app.use(bodyParser.json());
-//app.use(cors()); //allows all origins
-if (process.send.NODE_ENV === "development") {
-  app.use(cors({ origin: `http://localhost:3001` }));
-}
+app.use(cors()); //allows all origins
+// if (process.send.NODE_ENV === "development") {
+//   app.use(cors({ origin: `http://localhost:3001` }));
+// }
 
 // router middleware
 app.use("/api", authRoutes);
