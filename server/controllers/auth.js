@@ -37,11 +37,11 @@ exports.signup = (req, res) => {
       });
     }
 
-    const token = jwt.sign(
-      { name, email, password },
-      process.env.JWT_ACCOUNT_ACTIVATION,
-      { expiresIn: "10m" }
-    );
+    const secret = process.env.JWT_ACCOUNT_ACTIVATION;
+
+    const token = jwt.sign({ name, email, password }, secret, {
+      expiresIn: "10m",
+    });
 
     const emailData = {
       from: process.env.EMAIL_FROM,
@@ -49,7 +49,7 @@ exports.signup = (req, res) => {
       subject: `Account activiation link`,
       html: `
       <h1>Please use the following link to activate your account</h1>
-      <p>${process.env.CLIENT_URL}/auth/activate/${token}</p>
+      <p>${process.env.CLIENT_URL}/auth/activate/${token}/${secret}</p>
       <hr/>
       <p>This email may contain sensitive information</p>
       <p>${process.env.CLIENT_URL}</p>
@@ -75,6 +75,7 @@ exports.signup = (req, res) => {
 // account activation
 exports.accountActivation = (req, res) => {
   const { token } = req.body;
+  console.log(token);
   if (token) {
     jwt.verify(token, process.env.JWT_ACCOUNT_ACTIVATION, (err, decoded) => {
       if (err) {
@@ -95,7 +96,7 @@ exports.accountActivation = (req, res) => {
       });
     });
   } else {
-    return res.json({ message: "Somthing went wrong. Try again!" });
+    return res.json({ message: "Something went wrong. Try again!" });
   }
 };
 

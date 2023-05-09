@@ -1,17 +1,10 @@
 import React, { useState } from "react";
-import { Form, Link, Redirect } from "react-router-dom";
 import Layout from "../core/Layout";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
 const Signup = () => {
-  //   const [values, setValues] = useState({
-  //     name: "",
-  //     email: "",
-  //     password: "",
-  //     btnText: "",
-  //   });
   const [nameInput, setNameInput] = useState("");
   const [emailInput, setEmailInput] = useState("");
   const [pwInput, setPWInput] = useState("");
