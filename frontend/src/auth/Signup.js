@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "../core/Layout";
 import axios from "axios";
+import { Link, redirect, useNavigate } from "react-router-dom";
+import { authenticate, isAuth } from "./helpers";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
@@ -9,6 +11,12 @@ const Signup = () => {
   const [emailInput, setEmailInput] = useState("");
   const [pwInput, setPWInput] = useState("");
   const [btnText, setBtnText] = useState("Submit");
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuth()) navigate("/");
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();

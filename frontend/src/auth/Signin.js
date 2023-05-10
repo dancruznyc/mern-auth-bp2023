@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Link, redirect, useNavigate } from "react-router-dom";
 import Layout from "../core/Layout";
 import axios from "axios";
+import { authenticate, isAuth } from "./helpers";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
 
@@ -8,6 +10,8 @@ const Signin = () => {
   const [emailInput, setEmailInput] = useState("");
   const [pwInput, setPWInput] = useState("");
   const [btnText, setBtnText] = useState("Submit");
+
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,11 +25,13 @@ const Signin = () => {
       .then((response) => {
         console.log("Signin Success", response);
         //save res to localstorage and cookies
-
-        setEmailInput("");
-        setPWInput("");
-        setBtnText("Submit");
-        toast.success(`Hey ${response.data.user.name}, Welcome Back`);
+        authenticate(response, () => {
+          setEmailInput("");
+          setPWInput("");
+          setBtnText("Submit");
+          toast.success(`Hey ${response.data.user.name}, Welcome Back`);
+          navigate("/");
+        });
       })
       .catch((err) => {
         console.log("Signin error", err.response.data);
@@ -33,6 +39,11 @@ const Signin = () => {
         toast.error(err.response.data.error);
       });
   };
+
+  useEffect(() => {
+    if (isAuth()) navigate("/");
+  }, []);
+
   const SigninForm = () => (
     <form>
       <div className="form-group">
