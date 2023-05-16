@@ -12,6 +12,7 @@ import Signin from "./auth/Signin";
 import Activate from "./auth/Activate";
 import Private from "./core/Private";
 import ProtectedRoutes from "./core/ProtectedRoutes";
+import Admin from "./core/Admin";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,8 +21,13 @@ const router = createBrowserRouter(
       <Route path="/signup" element={<Signup />} />
       <Route path="/signin" element={<Signin />} />
       <Route path="/auth/activate/:token/:secret" element={<Activate />} />
-      <Route element={<ProtectedRoutes />}>
+      <Route
+        element={<ProtectedRoutes allowedRoles={["admin", "subscriber"]} />}
+      >
         <Route path="/private" element={<Private />} />
+      </Route>
+      <Route element={<ProtectedRoutes allowedRoles={["admin"]} />}>
+        <Route path="/admin" element={<Admin />} />
       </Route>
     </Route>
   )
